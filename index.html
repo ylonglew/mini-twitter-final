@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mini Twitter</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">Class feed</p>
+          <h1>Mini Twitter</h1>
+        </div>
+        <div class="status-pill" aria-label="Read only">Read only</div>
+      </header>
+
+      <section class="feed-panel" aria-labelledby="feed-title">
+        <div class="feed-title-row">
+          <h2 id="feed-title">Latest posts</h2>
+          <span class="feed-count" id="feed-count">Loading...</span>
+        </div>
+
+        <p class="error-message hidden" id="error-message"></p>
+        <div class="post-list" id="post-list" aria-live="polite">
+          <article class="post-card loading-card">
+            <div class="loading-line short"></div>
+            <div class="loading-line"></div>
+            <div class="loading-line"></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
