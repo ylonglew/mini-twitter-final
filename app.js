@@ -7,6 +7,7 @@ const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const postList = document.querySelector("#post-list");
 const feedCount = document.querySelector("#feed-count");
 const errorMessage = document.querySelector("#error-message");
+let posts = [];
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -55,7 +56,7 @@ function friendlyTime(dateText) {
   });
 }
 
-function renderPosts(posts) {
+function renderPosts(newPostCreatedAt = "") {
   feedCount.textContent = `${posts.length} post${posts.length === 1 ? "" : "s"}`;
 
   if (posts.length === 0) {
@@ -68,9 +69,10 @@ function renderPosts(posts) {
       const author = escapeHtml(post.author || "Anonymous");
       const body = escapeHtml(post.body || "");
       const time = escapeHtml(friendlyTime(post.created_at));
+      const isNewPost = post.created_at === newPostCreatedAt;
 
       return `
-        <article class="post-card">
+        <article class="post-card${isNewPost ? " new-post" : ""}">
           <div class="post-meta">
             <span class="post-author">${author}</span>
             <time class="post-time" datetime="${escapeHtml(post.created_at)}">${time}</time>
@@ -82,6 +84,41 @@ function renderPosts(posts) {
     .join("");
 }
 
+function addRealtimePost(post) {
+  if (post.class_code !== CLASS_CODE) {
+    return;
+  }
+
+  posts = [post, ...posts].slice(0, 30);
+  renderPosts(post.created_at);
+}
+
+function subscribeToNewPosts() {
+  client
+    .channel("mini-twitter-2026-final-posts")
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "posts",
+        filter: `class_code=eq.${CLASS_CODE}`,
+      },
+      (payload) => {
+        addRealtimePost(payload.new);
+      },
+    )
+    .subscribe((status, error) => {
+      if (error) {
+        console.error("Supabase realtime error:", error);
+      }
+
+      if (status === "CHANNEL_ERROR") {
+        console.error("Supabase realtime channel could not connect.");
+      }
+    });
+}
+
 async function loadPosts() {
   errorMessage.classList.add("hidden");
   errorMessage.textContent = "";
@@ -89,7 +126,7 @@ async function loadPosts() {
 
   const { data, error } = await client
     .from("posts")
-    .select("author, body, created_at")
+    .select("author, body, created_at, class_code")
     .eq("class_code", CLASS_CODE)
     .order("created_at", { ascending: false })
     .limit(30);
@@ -104,7 +141,9 @@ async function loadPosts() {
     return;
   }
 
-  renderPosts(data ?? []);
+  posts = data ?? [];
+  renderPosts();
 }
 
 loadPosts();
+subscribeToNewPosts();

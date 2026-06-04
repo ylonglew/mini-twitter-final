@@ -114,6 +114,10 @@ h2 {
   background: var(--surface);
 }
 
+.post-card.new-post {
+  animation: new-post-highlight 1.8s ease-out;
+}
+
 .post-meta {
   display: flex;
   align-items: center;
@@ -187,6 +191,22 @@ h2 {
 @keyframes shimmer {
   to {
     background-position: -220% 0;
+  }
+}
+
+@keyframes new-post-highlight {
+  0% {
+    border-color: rgba(32, 166, 122, 0.75);
+    background: #effcf6;
+    box-shadow: 0 0 0 4px rgba(32, 166, 122, 0.16);
+    transform: translateY(-4px);
+  }
+
+  100% {
+    border-color: var(--line);
+    background: var(--surface);
+    box-shadow: none;
+    transform: translateY(0);
   }
 }
 
