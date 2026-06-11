@@ -137,8 +137,15 @@ async function handleMagicLinkSubmit(event) {
 
   if (error) {
     console.error("Supabase magic link error:", error);
+    const isRateLimited =
+      error.status === 429 ||
+      (error.status === 400 &&
+        (error.code === "over_email_send_rate_limit" ||
+          /rate.?limit|too many/i.test(error.message)));
     setAuthMessage(
-      "Sorry, Supabase could not send that magic link. Please check the email address and try again.",
+      isRateLimited
+        ? "Too many emails sent recently. Please wait a few minutes before requesting another magic link."
+        : "Sorry, Supabase could not send that magic link. Please check the email address and try again.",
       true,
     );
     return;
