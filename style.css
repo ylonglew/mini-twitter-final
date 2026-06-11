@@ -80,6 +80,116 @@ h2 {
   font-weight: 700;
 }
 
+.auth-panel {
+  margin-bottom: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow);
+}
+
+.auth-panel h2 {
+  margin-bottom: 8px;
+}
+
+.auth-help {
+  margin-bottom: 14px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.auth-form {
+  display: grid;
+  gap: 8px;
+}
+
+.auth-form label {
+  color: #30415c;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.auth-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.auth-controls input {
+  min-width: 0;
+  flex: 1 1 auto;
+  border: 1px solid #c7d4e4;
+  border-radius: 8px;
+  padding: 11px 12px;
+  color: var(--ink);
+  background: var(--surface);
+  font: inherit;
+}
+
+.auth-controls input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(21, 119, 201, 0.16);
+  outline: none;
+}
+
+button {
+  border: 0;
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: #ffffff;
+  background: var(--brand);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--brand-dark);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+.secondary-button {
+  color: var(--brand-dark);
+  background: #eaf4ff;
+}
+
+.secondary-button:hover {
+  background: #d9ecff;
+}
+
+.signed-in-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.signed-in-row p,
+.auth-message {
+  margin: 0;
+}
+
+.signed-in-row p {
+  overflow-wrap: anywhere;
+  font-weight: 800;
+}
+
+.auth-message {
+  min-height: 1.35em;
+  margin-top: 12px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.auth-message.error {
+  color: var(--danger);
+  font-weight: 700;
+}
+
 .feed-panel {
   padding: 18px;
   border: 1px solid var(--line);
@@ -217,15 +327,24 @@ h2 {
   }
 
   .app-header,
+  .auth-controls,
+  .signed-in-row,
   .post-meta {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .auth-controls input,
+  .auth-controls button,
+  .signed-in-row button {
+    width: 100%;
   }
 
   .post-time {
     white-space: normal;
   }
 
+  .auth-panel,
   .feed-panel {
     padding: 12px;
   }

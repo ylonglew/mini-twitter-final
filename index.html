@@ -16,6 +16,37 @@
         <div class="status-pill" aria-label="Read only">Read only</div>
       </header>
 
+      <section class="auth-panel" aria-labelledby="auth-title">
+        <h2 id="auth-title">Sign in</h2>
+        <p class="auth-help" id="auth-help">
+          Enter your email and Supabase will send you a magic sign-in link.
+        </p>
+
+        <form class="auth-form" id="auth-form">
+          <label for="email-input">Email address</label>
+          <div class="auth-controls">
+            <input
+              id="email-input"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            />
+            <button type="submit" id="magic-link-button">Send magic link</button>
+          </div>
+        </form>
+
+        <div class="signed-in-row hidden" id="signed-in-row">
+          <p id="signed-in-message"></p>
+          <button type="button" class="secondary-button" id="sign-out-button">
+            Sign out
+          </button>
+        </div>
+
+        <p class="auth-message" id="auth-message" aria-live="polite"></p>
+      </section>
+
       <section class="feed-panel" aria-labelledby="feed-title">
         <div class="feed-title-row">
           <h2 id="feed-title">Latest posts</h2>
