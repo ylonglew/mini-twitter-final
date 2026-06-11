@@ -1,6 +1,7 @@
 const SUPABASE_URL = "https://jbofbkkfczdwfoaxhcnv.supabase.co";
 const SUPABASE_KEY = "sb_publishable_5-Uy8MuODwW35jMYpRzxwQ_eImKrM9g";
 const CLASS_CODE = "2026-final";
+const AUTH_REDIRECT_URL = "https://ylonglew.github.io/mini-twitter-final/";
 
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -19,10 +20,7 @@ const errorMessage = document.querySelector("#error-message");
 let posts = [];
 
 function getMagicLinkRedirectUrl() {
-  const redirectUrl = new URL(window.location.href);
-  redirectUrl.search = "";
-  redirectUrl.hash = "";
-  return redirectUrl.toString();
+  return AUTH_REDIRECT_URL;
 }
 
 function getAuthErrorFromUrl() {
