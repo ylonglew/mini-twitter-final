@@ -190,13 +190,88 @@ button:disabled {
   font-weight: 700;
 }
 
-.feed-panel {
-  padding: 18px;
+.compose-panel {
+  margin-bottom: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.9);
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.92);
   box-shadow: var(--shadow);
 }
+
+.compose-panel h2 {
+  margin-bottom: 12px;
+}
+
+.compose-form {
+  display: grid;
+  gap: 8px;
+}
+
+.compose-field {
+  display: grid;
+  gap: 8px;
+}
+
+.compose-field textarea {
+  width: 100%;
+  border: 1px solid #c7d4e4;
+  border-radius: 8px;
+  padding: 11px 12px;
+  color: var(--ink);
+  background: var(--surface);
+  font: inherit;
+  resize: vertical;
+}
+
+.compose-field textarea:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(21, 119, 201, 0.16);
+  outline: none;
+}
+
+.compose-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.char-count {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.char-count.near-limit {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.char-count.at-limit {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.compose-message {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.compose-message.error {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.status-pill.can-post {
+  border-color: rgba(21, 119, 201, 0.36);
+  color: var(--brand-dark);
+  background: rgba(21, 119, 201, 0.1);
+}
+
+.feed-panel {
 
 .feed-title-row {
   display: flex;
@@ -329,6 +404,7 @@ button:disabled {
   .app-header,
   .auth-controls,
   .signed-in-row,
+  .compose-footer,
   .post-meta {
     align-items: flex-start;
     flex-direction: column;
@@ -336,7 +412,8 @@ button:disabled {
 
   .auth-controls input,
   .auth-controls button,
-  .signed-in-row button {
+  .signed-in-row button,
+  .compose-footer button {
     width: 100%;
   }
 

@@ -13,7 +13,7 @@
           <p class="eyebrow">Class feed</p>
           <h1>Mini Twitter</h1>
         </div>
-        <div class="status-pill" aria-label="Read only">Read only</div>
+        <div class="status-pill" id="status-pill" aria-label="Read only">Read only</div>
       </header>
 
       <section class="auth-panel" aria-labelledby="auth-title">
@@ -45,6 +45,27 @@
         </div>
 
         <p class="auth-message" id="auth-message" aria-live="polite"></p>
+      </section>
+
+      <section class="compose-panel hidden" id="compose-panel" aria-labelledby="compose-title">
+        <h2 id="compose-title">New post</h2>
+        <form class="compose-form" id="compose-form">
+          <div class="compose-field">
+            <textarea
+              id="post-body-input"
+              name="body"
+              placeholder="What's on your mind? (140 chars max)"
+              maxlength="140"
+              rows="3"
+              required
+            ></textarea>
+            <div class="compose-footer">
+              <span class="char-count" id="char-count">140</span>
+              <button type="submit" id="post-button">Post</button>
+            </div>
+          </div>
+        </form>
+        <p class="compose-message hidden" id="compose-message" aria-live="polite"></p>
       </section>
 
       <section class="feed-panel" aria-labelledby="feed-title">

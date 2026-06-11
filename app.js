@@ -14,10 +14,18 @@ const signedInRow = document.querySelector("#signed-in-row");
 const signedInMessage = document.querySelector("#signed-in-message");
 const signOutButton = document.querySelector("#sign-out-button");
 const authMessage = document.querySelector("#auth-message");
+const statusPill = document.querySelector("#status-pill");
+const composePanel = document.querySelector("#compose-panel");
+const composeForm = document.querySelector("#compose-form");
+const postBodyInput = document.querySelector("#post-body-input");
+const charCount = document.querySelector("#char-count");
+const postButton = document.querySelector("#post-button");
+const composeMessage = document.querySelector("#compose-message");
 const postList = document.querySelector("#post-list");
 const feedCount = document.querySelector("#feed-count");
 const errorMessage = document.querySelector("#error-message");
 let posts = [];
+let currentUser = null;
 
 function getMagicLinkRedirectUrl() {
   return AUTH_REDIRECT_URL;
@@ -98,20 +106,30 @@ function setAuthFormLoading(isLoading) {
 }
 
 function renderSignedOut() {
+  currentUser = null;
   authTitle.textContent = "Sign in";
   authHelp.textContent =
     "Enter your email and Supabase will send you a magic sign-in link.";
   authHelp.classList.remove("hidden");
   authForm.classList.remove("hidden");
   signedInRow.classList.add("hidden");
+  composePanel.classList.add("hidden");
+  statusPill.textContent = "Read only";
+  statusPill.setAttribute("aria-label", "Read only");
+  statusPill.classList.remove("can-post");
 }
 
 function renderSignedIn(user) {
+  currentUser = user;
   authTitle.textContent = "Account";
   authHelp.classList.add("hidden");
   authForm.classList.add("hidden");
   signedInMessage.textContent = `Signed in as ${user.email}`;
   signedInRow.classList.remove("hidden");
+  composePanel.classList.remove("hidden");
+  statusPill.textContent = "Post";
+  statusPill.setAttribute("aria-label", "Can post");
+  statusPill.classList.add("can-post");
 }
 
 async function handleMagicLinkSubmit(event) {
@@ -302,8 +320,66 @@ async function loadPosts() {
   renderPosts();
 }
 
+function setComposeMessage(message = "", isError = false) {
+  composeMessage.textContent = message;
+  composeMessage.classList.toggle("hidden", !message);
+  composeMessage.classList.toggle("error", isError);
+}
+
+function updateCharCount() {
+  const remaining = 140 - postBodyInput.value.length;
+  charCount.textContent = remaining;
+  charCount.classList.toggle("near-limit", remaining <= 20 && remaining > 0);
+  charCount.classList.toggle("at-limit", remaining === 0);
+}
+
+async function handlePostSubmit(event) {
+  event.preventDefault();
+
+  if (!currentUser) {
+    setComposeMessage("You must be signed in to post.", true);
+    return;
+  }
+
+  const body = postBodyInput.value.trim();
+  if (!body) {
+    setComposeMessage("Please write something before posting.", true);
+    return;
+  }
+
+  if (body.length > 140) {
+    setComposeMessage("Your message exceeds 140 characters.", true);
+    return;
+  }
+
+  postButton.disabled = true;
+  postButton.textContent = "Posting...";
+  setComposeMessage("");
+
+  const { error } = await client.from("posts").insert({
+    author: currentUser.email,
+    body,
+    class_code: CLASS_CODE,
+  });
+
+  postButton.disabled = false;
+  postButton.textContent = "Post";
+
+  if (error) {
+    console.error("Supabase post error:", error);
+    setComposeMessage("Sorry, your post could not be submitted. Please try again.", true);
+    return;
+  }
+
+  postBodyInput.value = "";
+  updateCharCount();
+  setComposeMessage("Your post was published!");
+}
+
 authForm.addEventListener("submit", handleMagicLinkSubmit);
 signOutButton.addEventListener("click", handleSignOut);
+composeForm.addEventListener("submit", handlePostSubmit);
+postBodyInput.addEventListener("input", updateCharCount);
 
 setupAuth();
 loadPosts();
