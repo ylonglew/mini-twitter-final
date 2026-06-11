@@ -356,6 +356,15 @@ async function handlePostSubmit(event) {
   postButton.textContent = "Posting...";
   setComposeMessage("");
 
+  const { data: sessionData } = await client.auth.getSession();
+  if (!sessionData?.session) {
+    postButton.disabled = false;
+    postButton.textContent = "Post";
+    setComposeMessage("Your session has expired. Please sign in again.", true);
+    renderSignedOut();
+    return;
+  }
+
   const { error } = await client.from("posts").insert({
     author: currentUser.email,
     body,
